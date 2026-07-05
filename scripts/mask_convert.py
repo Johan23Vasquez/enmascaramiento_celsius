@@ -14,6 +14,12 @@ import xarray as xr
 
 
 def load_region_geometry(shapefile_path, dissolve=True, crs="EPSG:4326"):
+    """
+    Loads a shapefile for a region (country, state, whatever) and returns
+    it as a single polygon (if dissolve=True) in the requested CRS.
+
+    shapefile_path: path to the .shp of the region you want to use as a mask.
+    """
     region = gpd.read_file(shapefile_path)
     region = region.to_crs(crs)
     if dissolve:
@@ -22,16 +28,29 @@ def load_region_geometry(shapefile_path, dissolve=True, crs="EPSG:4326"):
 
 
 def prepare_dataset(ds, x_dim="lon", y_dim="lat", crs="EPSG:4326"):
+    """
+    Gets the dataset ready to be clipped: tells rioxarray which are the
+    spatial dimensions and which CRS to use.
+    """
     ds = ds.rio.set_spatial_dims(x_dim=x_dim, y_dim=y_dim)
     ds = ds.rio.write_crs(crs)
     return ds
 
 
 def clip_to_region(ds, region_gdf, drop=False):
+    """
+    Clips a dataset (already prepared with prepare_dataset) to the polygon
+    in region_gdf. drop=False keeps the original grid and sets NaN outside
+    the region; drop=True also shrinks the array to the region's bounding box.
+    """
     return ds.rio.clip(region_gdf.geometry, region_gdf.crs, drop=drop)
 
 
 def kelvin_to_celsius(dataset_or_variable):
+    """
+    Converts from Kelvin to Celsius by subtracting 273.15.
+    Works the same whether you pass a full Dataset or just a DataArray/variable.
+    """
     return dataset_or_variable - 273.15
 
 
@@ -45,6 +64,16 @@ def mask_netcdf(
     crs="EPSG:4326",
     drop=False,
 ):
+    """
+    Clips a NetCDF to a region (using its shapefile), converts that
+    variable from Kelvin to Celsius, and returns the result.
+
+    The returned Dataset contains the full original grid with NaN outside
+    the region (or a cropped grid if drop=True), already in Celsius. Note
+    that this version does not save to disk -- ds_region.to_netcdf(output_path)
+    is commented out below; uncomment it if you want the result written to
+    output_path.
+    """
     with xr.open_dataset(netcdf_path) as ds:
         ds = prepare_dataset(ds, x_dim=x_dim, y_dim=y_dim, crs=crs)
         region = load_region_geometry(shapefile_path, crs=crs)
@@ -53,4 +82,5 @@ def mask_netcdf(
 
     ds_region[variable] = kelvin_to_celsius(ds_region[variable])
 
+    # ds_region.to_netcdf(output_path)
     return ds_region
