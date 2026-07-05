@@ -1,0 +1,15 @@
+[project]
+name = "enmascaramiento-celsius"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "geopandas>=1.1.4",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.0",
+    "netcdf4>=1.7.4",
+    "notebook>=7.6.0",
+    "rioxarray>=0.22.0",
+    "xarray>=2026.4.0",
+]
