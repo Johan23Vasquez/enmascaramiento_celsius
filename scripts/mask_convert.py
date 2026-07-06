@@ -6,7 +6,6 @@ Originally built for UTCI (ERA5-HEAT), but the masking is generic: it works
 for any region, as long as you give it the right .shp (Mexico, another
 country, a state, whatever).
 """
-from __future__ import annotations
 import argparse
 import geopandas as gpd
 import rioxarray
@@ -27,23 +26,23 @@ def load_region_geometry(shapefile_path, dissolve=True, crs="EPSG:4326"):
     return region
 
 
-def prepare_dataset(ds, x_dim="lon", y_dim="lat", crs="EPSG:4326"):
+def prepare_dataset(netCDF, x_dim="lon", y_dim="lat", crs="EPSG:4326"):
     """
     Gets the dataset ready to be clipped: tells rioxarray which are the
     spatial dimensions and which CRS to use.
     """
-    ds = ds.rio.set_spatial_dims(x_dim=x_dim, y_dim=y_dim)
-    ds = ds.rio.write_crs(crs)
-    return ds
+    netCDF = netCDF.rio.set_spatial_dims(x_dim=x_dim, y_dim=y_dim)
+    netCDF = netCDF.rio.write_crs(crs)
+    return netCDF
 
 
-def clip_to_region(ds, region_gdf, drop=False):
+def clip_to_region(netCDF, region_gdf, drop=False):
     """
     Clips a dataset (already prepared with prepare_dataset) to the polygon
     in region_gdf. drop=False keeps the original grid and sets NaN outside
     the region; drop=True also shrinks the array to the region's bounding box.
     """
-    return ds.rio.clip(region_gdf.geometry, region_gdf.crs, drop=drop)
+    return netCDF.rio.clip(region_gdf.geometry, region_gdf.crs, drop=drop)
 
 
 def kelvin_to_celsius(dataset_or_variable):
@@ -57,7 +56,6 @@ def kelvin_to_celsius(dataset_or_variable):
 def mask_netcdf(
     netcdf_path,
     shapefile_path,
-    output_path,
     variable="utci",
     x_dim="lon",
     y_dim="lat",
@@ -74,13 +72,13 @@ def mask_netcdf(
     is commented out below; uncomment it if you want the result written to
     output_path.
     """
-    with xr.open_dataset(netcdf_path) as ds:
-        ds = prepare_dataset(ds, x_dim=x_dim, y_dim=y_dim, crs=crs)
+    with xr.open_dataset(netcdf_path) as netCDF:
+        netCDF = prepare_dataset(netCDF, x_dim=x_dim, y_dim=y_dim, crs=crs)
         region = load_region_geometry(shapefile_path, crs=crs)
-        ds_region = clip_to_region(ds, region, drop=drop)
-        ds_region = ds_region.load()
+        netCDF_region = clip_to_region(netCDF, region, drop=drop)
+        netCDF_region = netCDF_region.load()
 
-    ds_region[variable] = kelvin_to_celsius(ds_region[variable])
+    netCDF_region[variable] = kelvin_to_celsius(netCDF_region[variable])
 
     # ds_region.to_netcdf(output_path)
-    return ds_region
+    return netCDF_region
