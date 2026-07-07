@@ -1,7 +1,11 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "enmascaramiento-celsius"
 version = "0.1.0"
-description = "Add your description here"
+description = "Utilities for masking climate NetCDF datasets."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -13,3 +17,6 @@ dependencies = [
     "rioxarray>=0.22.0",
     "xarray>=2026.4.0",
 ]
+
+[tool.setuptools]
+packages = ["scripts"]

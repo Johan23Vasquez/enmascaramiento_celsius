@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+enmascaramiento_celsius.egg-info/PKG-INFO
+enmascaramiento_celsius.egg-info/SOURCES.txt
+enmascaramiento_celsius.egg-info/dependency_links.txt
+enmascaramiento_celsius.egg-info/requires.txt
+enmascaramiento_celsius.egg-info/top_level.txt
+scripts/__init__.py
+scripts/mask_convert.py
+scripts/mask_gpkg.py
+scripts/prepare_era5.py

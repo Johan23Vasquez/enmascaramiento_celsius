@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: enmascaramiento-celsius
+Version: 0.1.0
+Summary: Utilities for masking climate NetCDF datasets.
+Requires-Python: >=3.13
+Description-Content-Type: text/markdown
+Requires-Dist: geopandas>=1.1.4
+Requires-Dist: jupyter>=1.1.1
+Requires-Dist: matplotlib>=3.11.0
+Requires-Dist: netcdf4>=1.7.4
+Requires-Dist: notebook>=7.6.0
+Requires-Dist: rioxarray>=0.22.0
+Requires-Dist: xarray>=2026.4.0
