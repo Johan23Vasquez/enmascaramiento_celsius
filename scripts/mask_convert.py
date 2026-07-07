@@ -64,13 +64,12 @@ def mask_netcdf(
 ):
     """
     Clips a NetCDF to a region (using its shapefile), converts that
-    variable from Kelvin to Celsius, and returns the result.
+    variable from Kelvin to Celsius, and returns the result in memory.
 
     The returned Dataset contains the full original grid with NaN outside
-    the region (or a cropped grid if drop=True), already in Celsius. Note
-    that this version does not save to disk -- ds_region.to_netcdf(output_path)
-    is commented out below; uncomment it if you want the result written to
-    output_path.
+    the region (or a cropped grid if drop=True), already in Celsius. This
+    function does not write anything to disk -- if you want the result
+    saved, call netCDF_region.to_netcdf(your_path) on what it returns.
     """
     with xr.open_dataset(netcdf_path) as netCDF:
         netCDF = prepare_dataset(netCDF, x_dim=x_dim, y_dim=y_dim, crs=crs)
@@ -80,5 +79,4 @@ def mask_netcdf(
 
     netCDF_region[variable] = kelvin_to_celsius(netCDF_region[variable])
 
-    # ds_region.to_netcdf(output_path)
     return netCDF_region
