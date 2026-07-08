@@ -68,7 +68,7 @@ def prepare_dataset(dataset, x_dim="lon", y_dim="lat", crs="EPSG:4326"):
     return dataset
 
 
-def clip_to_region(dataset, region_gdf, drop=False):
+def clip_to_region(dataset, region_gdf, drop=True):
     """
     Clips a dataset to the supplied region.
 
