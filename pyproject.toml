@@ -10,11 +10,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "geopandas>=1.1.4",
+    "ipyleaflet>=0.20.0",
     "jupyter>=1.1.1",
     "matplotlib>=3.11.0",
     "netcdf4>=1.7.4",
     "notebook>=7.6.0",
+    "pillow>=12.3.0",
     "rioxarray>=0.22.0",
+    "shiny>=1.6.3",
+    "shinywidgets>=0.8.1",
     "xarray>=2026.4.0",
 ]
 

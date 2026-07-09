@@ -5,9 +5,13 @@ Summary: Utilities for masking climate NetCDF datasets.
 Requires-Python: >=3.13
 Description-Content-Type: text/markdown
 Requires-Dist: geopandas>=1.1.4
+Requires-Dist: ipyleaflet>=0.20.0
 Requires-Dist: jupyter>=1.1.1
 Requires-Dist: matplotlib>=3.11.0
 Requires-Dist: netcdf4>=1.7.4
 Requires-Dist: notebook>=7.6.0
+Requires-Dist: pillow>=12.3.0
 Requires-Dist: rioxarray>=0.22.0
+Requires-Dist: shiny>=1.6.3
+Requires-Dist: shinywidgets>=0.8.1
 Requires-Dist: xarray>=2026.4.0
